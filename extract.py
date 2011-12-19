@@ -62,16 +62,14 @@ def extract(bmp_filename):
     bmp.close()
 
     decrypted = []
-    marker_found = True
     for b in decrypt_char(container):
         decrypted.append(b)
         # Определение, что в заданном изображении есть файл
         if (len(marker) == len(decrypted) and
             marker != ''.join(decrypted)):
-            marker_found = False
             raise ExtractException('The image does not contain '
                                    'confidential file.')
-    if marker_found:
+    if len(decrypted) > len(marker):
         # Список ['', 'source file name', 'source file data', '']
         decrypted = ''.join(decrypted).split(marker)
         src_filename = decrypted[1]
